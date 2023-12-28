@@ -1,18 +1,14 @@
 const express = require("express");
-const cors = require("cors"); // FE랑 소통
+const cors = require("cors");
 const mongoose = require("mongoose");
+const userRoute = require("./Routes/userRoute");
 
-const app = express(); // app으로 express 사용
+const app = express();
 require("dotenv").config();
 
-// 미들웨어?
-app.use(express.json()); //json 데이터
+app.use(express.json());
 app.use(cors());
-
-// create -> app.post
-// read -> app.get
-// use -> app.put
-// delete -> app.delete
+app.use("/api/users", userRoute);
 
 app.get("/", (req, res) => {
   res.send("Welcome our chat app APIs..");
@@ -26,9 +22,11 @@ app.listen(port, (req, res) => {
 });
 
 mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    uri
+    // mongoose 6.0 이상부터 기본 true로 동작함
+    //, {useNewUrlParser: true,
+    // useUnifiedTopology: true }
+  )
   .then(() => console.log("MongoDB connection established"))
   .catch((error) => console.log("MongoDB connection failed: ", error.message));
